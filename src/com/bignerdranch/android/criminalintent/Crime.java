@@ -31,7 +31,7 @@ public class Crime
 		return mDate;
 	} // mDate get method end
 	
-	public boolean getSolved() // mSolved get method start
+	public boolean isSolved() // mSolved get method start
 	{
 		return mSolved;
 	} // mSolved get method end
@@ -51,4 +51,10 @@ public class Crime
 	{
 		mSolved = solved;
 	} // mSolved set method end
+	
+	@Override
+	public String toString()
+	{
+		return mTitle;
+	}
 }

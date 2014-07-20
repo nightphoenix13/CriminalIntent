@@ -6,22 +6,13 @@ import android.os.*;
 import android.view.*;
 import android.os.*;
 
-public class CrimeActivity extends ActionBarActivity {
+public class CrimeActivity extends SingleFragmentActivity
+{
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected Fragment createFragment()
 	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_crime);
-		
-		FragmentManager fm = getSupportFragmentManager();
-		Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-		
-		if (fragment == null)
-		{
-			fragment = new CrimeFragment();
-			fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
-		} // end if
+		return new CrimeFragment();
 	}
 
 	

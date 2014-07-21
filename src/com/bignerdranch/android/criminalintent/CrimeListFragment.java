@@ -2,6 +2,7 @@ package com.bignerdranch.android.criminalintent;
 
 import java.util.*;
 
+import android.content.*;
 import android.os.*;
 import android.support.v4.app.*;
 import android.util.*;
@@ -28,7 +29,18 @@ public class CrimeListFragment extends ListFragment
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
 		Crime c = ((CrimeAdapter)getListAdapter()).getItem(position);
-		Log.d(TAG, c.getTitle() + " was clicked");
+
+		// start CrimeActivity
+		Intent i = new Intent(getActivity(), CrimeActivity.class);
+		i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getId());
+		startActivity(i);
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		((CrimeAdapter)getListAdapter()).notifyDataSetChanged();
 	}
 	
 	private class CrimeAdapter extends ArrayAdapter<Crime>

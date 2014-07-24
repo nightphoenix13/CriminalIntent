@@ -17,11 +17,14 @@ public class CrimeFragment extends Fragment
 	public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 	
 	private static final String DIALOG_DATE = "date";
+	private static final String DIALOG_TIME = "time";
 	private static final int REQUEST_DATE = 0;
+	private static final int REQUEST_TIME = 0;
 	
 	private Crime mCrime;
 	private EditText mTitleField;
 	private Button mDateButton;
+	private Button mTimeButton;
 	private CheckBox mSolvedCheckBox;
 	
 	@Override
@@ -78,6 +81,20 @@ public class CrimeFragment extends Fragment
 			}
 		});
 		
+		mTimeButton = (Button)v.findViewById(R.id.crime_time);
+		updateTime();
+		mTimeButton.setOnClickListener(new View.OnClickListener()
+		{	
+			@Override
+			public void onClick(View v)
+			{
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+				TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getTime());
+				dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+				dialog.show(fm, DIALOG_TIME);
+			}
+		});
+		
 		mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
 		mSolvedCheckBox.setChecked(mCrime.isSolved());
 		mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
@@ -99,17 +116,23 @@ public class CrimeFragment extends Fragment
 		{
 			return;
 		}
-		if (requestCode == REQUEST_DATE)
+		if (requestCode == REQUEST_DATE || requestCode == REQUEST_TIME)
 		{
 			Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 			mCrime.setDate(date);
 			updateDate();
+			updateTime();
 		}
 	}
 	
 	private void updateDate()
 	{
 		mDateButton.setText(DateFormat.format("EEEE, MMMM dd, yyyy", mCrime.getDate()));
+	}
+	
+	private void updateTime()
+	{
+		mTimeButton.setText(mCrime.getTime().toString());
 	}
 	
 	public static CrimeFragment newInstance(UUID crimeId)

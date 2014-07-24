@@ -1,18 +1,22 @@
 package com.bignerdranch.android.criminalintent;
 
-import java.util.*;
+import java.sql.*;
+import java.util.Date;
+import java.util.UUID;
 
 public class Crime
 {
 	private UUID mId;
 	private String mTitle;
 	private Date mDate;
+	private Time mTime;
 	private boolean mSolved;
 	
 	public Crime()
 	{
 		mId = UUID.randomUUID();
 		mDate = new Date();
+		mTime = new Time(mDate.getTime());
 	}
 	
 	// get methods
@@ -31,6 +35,11 @@ public class Crime
 		return mDate;
 	} // mDate get method end
 	
+	public Time getTime() // mTime get method start
+	{
+		return mTime;
+	} // mTime get method end
+	
 	public boolean isSolved() // mSolved get method start
 	{
 		return mSolved;
@@ -45,7 +54,13 @@ public class Crime
 	public void setDate(Date date) // mDate set method start
 	{
 		mDate = date;
+		setTime(mDate.getTime());
 	} // mDate set method end
+	
+	private void setTime(long time) // mTime set method start
+	{
+		mTime.setTime(time);
+	}
 	
 	public void setSolved(boolean solved) // mSolved set method start
 	{

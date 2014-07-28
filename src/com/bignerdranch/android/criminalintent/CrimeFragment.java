@@ -1,6 +1,8 @@
 package com.bignerdranch.android.criminalintent;
 
 import java.util.*;
+import java.util.Date;
+import java.sql.Time;
 
 import android.app.Activity;
 import android.content.*;
@@ -19,7 +21,7 @@ public class CrimeFragment extends Fragment
 	private static final String DIALOG_DATE = "date";
 	private static final String DIALOG_TIME = "time";
 	private static final int REQUEST_DATE = 0;
-	private static final int REQUEST_TIME = 0;
+	private static final int REQUEST_TIME = 1;
 	
 	private Crime mCrime;
 	private EditText mTitleField;
@@ -116,11 +118,16 @@ public class CrimeFragment extends Fragment
 		{
 			return;
 		}
-		if (requestCode == REQUEST_DATE || requestCode == REQUEST_TIME)
+		if (requestCode == REQUEST_DATE)
 		{
 			Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 			mCrime.setDate(date);
 			updateDate();
+		}
+		if (requestCode == REQUEST_TIME)
+		{
+			Time time = (Time)data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+			mCrime.cloneTime(time);
 			updateTime();
 		}
 	}

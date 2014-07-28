@@ -57,9 +57,16 @@ public class Crime
 		setTime(mDate.getTime());
 	} // mDate set method end
 	
-	private void setTime(long time) // mTime set method start
+	public void setTime(long time) // mTime set method start
 	{
 		mTime.setTime(time);
+		mDate.setTime(mTime.getTime());
+	}
+	
+	public void cloneTime(Time time) // set method using another Time object
+	{
+		mTime = time;
+		mDate.setTime(mTime.getTime());
 	}
 	
 	public void setSolved(boolean solved) // mSolved set method start

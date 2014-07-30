@@ -1,9 +1,9 @@
 package com.bignerdranch.android.criminalintent;
 
 import java.util.*;
-import java.util.Date;
 import java.sql.Time;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.*;
 import android.os.*;
@@ -36,13 +36,24 @@ public class CrimeFragment extends Fragment
 		UUID crimeId = (UUID)getArguments().getSerializable(EXTRA_CRIME_ID);
 		
 		mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+		
+		setHasOptionsMenu(true);
 	}
 	
+	@TargetApi(11)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
 			Bundle savedInstanceState)
 	{
 		View v = inflater.inflate(R.layout.fragment_crime, parent, false);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+		{
+			if (NavUtils.getParentActivityName(getActivity()) != null)
+			{
+				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+			}
+		}
 		
 		mTitleField = (EditText)v.findViewById(R.id.crime_title);
 		mTitleField.setText(mCrime.getTitle());
@@ -129,6 +140,22 @@ public class CrimeFragment extends Fragment
 			Time time = (Time)data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
 			mCrime.cloneTime(time);
 			updateTime();
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+		case android.R.id.home:
+			if (NavUtils.getParentActivityName(getActivity()) != null)
+			{
+				NavUtils.navigateUpFromSameTask(getActivity());
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 	

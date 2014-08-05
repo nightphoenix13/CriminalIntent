@@ -2,7 +2,9 @@ package com.bignerdranch.android.criminalintent;
 
 import java.sql.*;
 import java.util.Date;
-import java.util.UUID;
+import java.util.*;
+
+import org.json.*;
 
 public class Crime
 {
@@ -12,11 +14,27 @@ public class Crime
 	private Time mTime;
 	private boolean mSolved;
 	
+	private static final String JSON_ID = "id";
+	private static final String JSON_TITLE = "title";
+	private static final String JSON_SOLVED = "solved";
+	private static final String JSON_DATE = "date";
+	
 	public Crime()
 	{
 		mId = UUID.randomUUID();
 		mDate = new Date();
 		mTime = new Time(mDate.getTime());
+	}
+	
+	public Crime(JSONObject json) throws JSONException
+	{
+		mId = UUID.fromString(json.getString(JSON_ID));
+		if (json.has(JSON_TITLE))
+		{
+			mTitle = json.getString(JSON_TITLE);
+		} // end if
+		mSolved = json.getBoolean(JSON_SOLVED);
+		mDate = new Date(json.getLong(JSON_DATE));
 	}
 	
 	// get methods
@@ -73,6 +91,16 @@ public class Crime
 	{
 		mSolved = solved;
 	} // mSolved set method end
+	
+	public JSONObject toJSON() throws JSONException
+	{
+		JSONObject json = new JSONObject();
+		json.put(JSON_ID, mId.toString());
+		json.put(JSON_TITLE, mTitle);
+		json.put(JSON_SOLVED, mSolved);
+		json.put(JSON_DATE, mDate.getTime());
+		return json;
+	}
 	
 	@Override
 	public String toString()

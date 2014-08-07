@@ -11,10 +11,11 @@ import android.support.v4.app.*;
 import android.text.*;
 import android.text.format.*;
 import android.view.*;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.*;
 import android.widget.CompoundButton.*;
 
-public class CrimeFragment extends Fragment
+public class CrimeFragment extends Fragment // CrimeFragment class start
 {
 	public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 	
@@ -30,7 +31,7 @@ public class CrimeFragment extends Fragment
 	private CheckBox mSolvedCheckBox;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(Bundle savedInstanceState) // onCreate method start
 	{
 		super.onCreate(savedInstanceState);
 		UUID crimeId = (UUID)getArguments().getSerializable(EXTRA_CRIME_ID);
@@ -38,12 +39,12 @@ public class CrimeFragment extends Fragment
 		mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
 		
 		setHasOptionsMenu(true);
-	}
+	} // onCreate method end
 	
 	@TargetApi(11)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-			Bundle savedInstanceState)
+			Bundle savedInstanceState) // onCreateView method start
 	{
 		View v = inflater.inflate(R.layout.fragment_crime, parent, false);
 		
@@ -52,99 +53,97 @@ public class CrimeFragment extends Fragment
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-			}
-		}
+			} // end if
+		} // end if
 		
 		mTitleField = (EditText)v.findViewById(R.id.crime_title);
 		mTitleField.setText(mCrime.getTitle());
-		mTitleField.addTextChangedListener(new TextWatcher()
+		mTitleField.addTextChangedListener(new TextWatcher() // anonymous inner class start
 		{
 			public void onTextChanged(CharSequence c, int start, int before,
-					int count)
+					int count) // onTextChanged method start
 			{
 				mCrime.setTitle(c.toString());
-			}
+			} // onTextChanged method end
 			
 			public void beforeTextChanged(CharSequence c, int start, int before,
-					int count)
+					int count) // beforeTextChanged method start
 			{
 				// do nothing
-			}
+			} // beforeTextChanged method end
 			
-			public void afterTextChanged(Editable c)
+			public void afterTextChanged(Editable c) // afterTextChanged method start
 			{
 				// do nothing
-			}
-		});
-		
-		
+			} // afterTextChanged method end
+		}); // anonymous inner class end
 		
 		mDateButton = (Button)v.findViewById(R.id.crime_date);
 		updateDate();
-		mDateButton.setOnClickListener(new View.OnClickListener()
+		mDateButton.setOnClickListener(new View.OnClickListener() // anonymous inner class start
 		{
 			@Override
-			public void onClick(View v)
+			public void onClick(View v) // onClick method start
 			{
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 				DatePickerFragment dialog = DatePickerFragment.newInstance(
 						mCrime.getDate());
 				dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
 				dialog.show(fm, DIALOG_DATE);
-			}
-		});
+			} // onClick method end
+		}); // anonymous inner class end
 		
 		mTimeButton = (Button)v.findViewById(R.id.crime_time);
 		updateTime();
-		mTimeButton.setOnClickListener(new View.OnClickListener()
+		mTimeButton.setOnClickListener(new View.OnClickListener() // anonymous inner class start
 		{	
 			@Override
-			public void onClick(View v)
+			public void onClick(View v) // onClick method start
 			{
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 				TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getTime());
 				dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
 				dialog.show(fm, DIALOG_TIME);
-			}
-		});
+			} // onClick method end
+		}); // anonymous inner class end
 		
 		mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
 		mSolvedCheckBox.setChecked(mCrime.isSolved());
-		mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() // anonymous inner class start
 		{
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) // onCheckedChanged method start
 			{
 				mCrime.setSolved(isChecked);
-			}
-		});
+			} // onCheckedChanged method end
+		}); // anonymous inner class end
 		
 		return v;
-	}
+	} // onCreateView method end
 	
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent data) // onActivityResult method start
 	{
 		if (resultCode != Activity.RESULT_OK)
 		{
 			return;
-		}
+		} // end if
 		if (requestCode == REQUEST_DATE)
 		{
 			Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 			mCrime.setDate(date);
 			updateDate();
-		}
+		} // end if
 		if (requestCode == REQUEST_TIME)
 		{
 			Time time = (Time)data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
 			mCrime.cloneTime(time);
 			updateTime();
-		}
-	}
+		} // end if
+	} // onActivytResult method end
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(MenuItem item) // onOptionsItemSelected method start 
 	{
 		switch (item.getItemId())
 		{
@@ -152,31 +151,31 @@ public class CrimeFragment extends Fragment
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
 				NavUtils.navigateUpFromSameTask(getActivity());
-			}
+			} // end if
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
-		}
-	}
+		} // end switch
+	} // onOptionsItemSelected method end
 	
 	@Override
-	public void onPause()
+	public void onPause() // onPause method start
 	{
 		super.onPause();
 		CrimeLab.get(getActivity()).saveCrimes();
-	}
+	} // onPause method end
 	
-	private void updateDate()
+	private void updateDate() // updateDate method start
 	{
 		mDateButton.setText(DateFormat.format("EEEE, MMMM dd, yyyy", mCrime.getDate()));
-	}
+	} // updateDate method end
 	
-	private void updateTime()
+	private void updateTime() // updateTime method start
 	{
 		mTimeButton.setText(mCrime.getTime().toString());
-	}
+	} // updateTime method end
 	
-	public static CrimeFragment newInstance(UUID crimeId)
+	public static CrimeFragment newInstance(UUID crimeId) // newInstance method start
 	{
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_CRIME_ID, crimeId);
@@ -185,5 +184,5 @@ public class CrimeFragment extends Fragment
 		fragment.setArguments(args);
 		
 		return fragment;
-	}
-}
+	} // newInstance method end
+} // class end

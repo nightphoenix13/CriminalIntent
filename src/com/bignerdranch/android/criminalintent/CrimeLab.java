@@ -47,6 +47,11 @@ public class CrimeLab // class start
 		mCrimes.add(c);
 	} // addCrime method end
 	
+	public void deleteCrime(Crime c) // deleteCrime method start
+	{
+		mCrimes.remove(c);
+	} // deleteCrime method end
+	
 	public boolean saveCrimes() // saveCrimes method start
 	{
 		try

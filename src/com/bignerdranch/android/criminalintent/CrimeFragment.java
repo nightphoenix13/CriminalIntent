@@ -6,12 +6,13 @@ import java.sql.Time;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.*;
+import android.content.pm.*;
+import android.hardware.Camera;
 import android.os.*;
 import android.support.v4.app.*;
 import android.text.*;
 import android.text.format.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.*;
 import android.widget.CompoundButton.*;
 
@@ -29,6 +30,7 @@ public class CrimeFragment extends Fragment // CrimeFragment class start
 	private Button mDateButton;
 	private Button mTimeButton;
 	private CheckBox mSolvedCheckBox;
+	private ImageButton mPhotoButton;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) // onCreate method start
@@ -117,6 +119,27 @@ public class CrimeFragment extends Fragment // CrimeFragment class start
 				mCrime.setSolved(isChecked);
 			} // onCheckedChanged method end
 		}); // anonymous inner class end
+		
+		mPhotoButton = (ImageButton)v.findViewById(R.id.crime_imageButton);
+		mPhotoButton.setOnClickListener(new View.OnClickListener() // anonymous inner class start 
+		{
+			@Override
+			public void onClick(View v) // onClick method start
+			{
+				Intent i = new Intent(getActivity(), CrimeCameraActivity.class);
+				startActivity(i);
+			} // onClick method end
+		}); // anonymous inner class end
+		
+		PackageManager pm = getActivity().getPackageManager();
+		boolean hasACamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
+				pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT) ||
+				(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && 
+				Camera.getNumberOfCameras() > 0);
+		if (!hasACamera)
+		{
+			mPhotoButton.setEnabled(false);
+		} // end if
 		
 		return v;
 	} // onCreateView method end

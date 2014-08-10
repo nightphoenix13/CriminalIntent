@@ -1,8 +1,8 @@
 package com.bignerdranch.android.criminalintent;
 
-import android.app.DialogFragment;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.app.*;
 import android.view.*;
 import android.widget.ImageView;
 
